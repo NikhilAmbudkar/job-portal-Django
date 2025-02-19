@@ -1,0 +1,111 @@
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="brand-logo">🚀 JobGenie</a>
+        <button class="navbar-toggler shadow-sm border-0" type="button" data-bs-toggle="collapse" 
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">🏠 Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact' %}">📞 Contact Us</a>
+                </li>
+            </ul>
+            <form action="{% url 'home' %}" method="GET" class="d-flex search-form">
+                <input class="form-control search-input" type="search" placeholder="🔍 Find Jobs..." 
+                       aria-label="Search" name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-glow" type="submit">Go</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .custom-navbar {
+        background: linear-gradient(120deg, #1e1e2e, #252537, #2d2d44);
+        padding: 15px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #brand-logo {
+        font-size: 24px;
+        letter-spacing: 1px;
+        color: #08f7fe;
+        transition: 0.3s ease-in-out;
+    }
+
+    #brand-logo:hover {
+        text-shadow: 0 0 10px #08f7fe, 0 0 20px #08f7fe;
+    }
+    .nav-link {
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: 0.3s ease-in-out;
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        width: 0%;
+        height: 3px;
+        background: #08f7fe;
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: width 0.3s ease-in-out;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    .search-input {
+        width: 250px;
+        border-radius: 25px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px 15px;
+        color: #fff;
+        transition: 0.3s ease-in-out;
+        outline: none;
+    }
+
+    .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-input:focus {
+        border-color: #08f7fe;
+        box-shadow: 0 0 10px #08f7fe;
+    }
+    .btn-glow {
+        background: #08f7fe;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0px 0px 10px rgba(8, 247, 254, 0.8);
+    }
+
+    .btn-glow:hover {
+        background: #06d6e2;
+        box-shadow: 0px 0px 20px rgba(8, 247, 254, 1);
+        transform: scale(1.05);
+    }
+    .navbar-toggler {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+    }
+</style>

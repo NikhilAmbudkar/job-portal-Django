@@ -1,0 +1,172 @@
+{% extends 'main.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block title %}Contact Us{% endblock %}
+  {% load static %}
+  <link rel="icon" type="image/png" href="{% static 'images/titlecontact.jpeg' %}">
+  {% block content %}
+  <style>
+    body {
+      background: url("{% static 'images/contact.avif' %}") no-repeat center center/cover;
+      background-size: cover;
+      color: #fff; 
+    }
+    .glass-form {
+      padding: 40px;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 900px;
+    }
+    .card {
+      background: transparent;
+      border: none;
+    }
+    .card-body {
+      background: rgba(2, 47, 73, 0.85);
+      border-radius: 10px;
+      padding: 2rem;
+      color: #fff;
+    }
+    .form-label {
+      color: #fff;
+    }
+    .form-control {
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid #fff;
+    }
+    .form-control::placeholder {
+      color: #ddd;
+    }
+    .btn-primary {
+      color: #fff;
+    }
+    .custom-modal {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: fadeInZoom 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeInZoom {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-header, .modal-footer {
+      border: none;
+  }
+
+  .alert {
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      color: white;
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease-in-out;
+  }
+  .custom-btn {
+      background: linear-gradient(135deg, #ff9966, #ff5e62);
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      padding: 12px;
+      color: #fff;
+      text-transform: uppercase;
+      transition: 0.3s;
+      font-weight: bold;
+  }
+
+  .custom-btn:hover {
+      background: linear-gradient(135deg, #ff5e62, #ff9966);
+      transform: scale(1.05);
+  }
+  </style>
+  
+</head>
+<body>
+<div class="glass-form">
+    <h2 class="text-center mb-4 text-primary">Contact Us</h2>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <p class="lead text-center text-muted mb-4"><b>
+                Your thoughts matter to us! Whether you have a question, feedback, or just want to say hello, we’re here to listen. Drop us a message below, and we’ll get back to you as soon as we can.
+            </b></p>
+            <div class="card shadow-sm rounded-3">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'contact' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ request.user }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ user.email }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control form-control-lg" id="message" name="message" rows="5" required placeholder="Write your message here"></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-bell-fill text-warning"></i> JobGenie
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2 text-success"></i> 
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn custom-btn w-100" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endif %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var messageModal = document.getElementById('messageModal');
+      if (messageModal) {
+          var myModal = new bootstrap.Modal(messageModal);
+          setTimeout(() => {
+              myModal.show();
+          }, 50);
+      }
+  });
+</script>
+
+{% endblock content %}
+
+</body>
+</html>

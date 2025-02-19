@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  {% load static %}
+  <link rel="icon" type="image/png" href="{% static 'images/title_profile.jpeg' %}">
+  
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+  }
+  
+  .profile-container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    overflow: hidden;
+    margin: 50px auto;
+  }
+  .profile-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    text-align: center;
+    padding: 40px;
+  }
+  .profile-header h1 {
+    font-size: 2.8em;
+    margin-bottom: 10px;
+  }
+  .profile-header p {
+    font-size: 1.2em;
+  }
+  .profile-content {
+    padding: 40px;
+  }
+  .profile-info {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .profile-left {
+    flex: 1 1 250px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .profile-image {
+    margin-bottom: 0;
+  }
+  .profile-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid #667eea;
+    object-fit: cover;
+  }
+  .profile-right {
+    flex: 2 1 400px;
+    padding-left: 30px;
+    text-align: left;
+  }
+  .profile-details p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #555;
+  }
+  .profile-details p strong {
+    color: #333;
+  }
+  .profile-bio {
+    background: #f9f9f9;
+    padding: 20px;
+    border-left: 4px solid #667eea;
+    border-radius: 0 5px 5px 0;
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  .profile-actions {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #eee;
+  }
+  .edit-profile-btn {
+    background: #667eea;
+    color: #fff;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background 0.3s ease;
+  }
+  .edit-profile-btn:hover {
+    background: #5a67d8;
+  }
+  @media(max-width: 768px) {
+    .profile-info {
+      flex-direction: column;
+    }
+    .profile-right {
+      padding-left: 0;
+      margin-top: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>{{ user.username }}</h1>
+    <p>Welcome to your personal profile page</p>
+  </div>
+  <div class="profile-content">
+    <div class="profile-info">
+      <div class="profile-left">
+        <div class="profile-image">
+          {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+          {% else %}
+            <img src="https://via.placeholder.com/200" alt="Profile Picture">
+          {% endif %}
+        </div>
+      </div>
+      <div class="profile-right">
+        <div class="profile-details">
+          <p><strong>First Name:</strong> {{ user.first_name }}</p>
+          <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Birthdate:</strong> {{ user.profile.birthdate }}</p>
+          <p><strong>Mobile Number:</strong> {{ user.profile.mobile_number }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="profile-bio">
+      <p><strong>About:</strong></p>
+      <p>{{ user.profile.bio }}</p>
+    </div>
+  </div>
+  <div class="profile-actions">
+    <a href="{% url 'edit_profile' %}" class="edit-profile-btn">Edit Profile</a>
+    <a href="{% url 'home' %}" class="edit-profile-btn" style="background: #ff6b6b;">Back</a>
+  </div>
+</div>
+{% endblock %}
+</body>
+</html>

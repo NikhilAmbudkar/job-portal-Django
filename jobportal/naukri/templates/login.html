@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In</title>
+  {% block content %}
+  {% load static %}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f2f5;
+      position: relative;
+      overflow: hidden;
+      color: #333;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("{% static 'images/sign.jpg' %}") no-repeat center center/cover;
+      filter: brightness(60%);
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h1 {
+      color: #3498db;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    
+
+    label {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: rgba(26, 188, 156, 1);
+      font-weight: bold;
+      display: block;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      background-color: rgba(255, 255, 255, 1);
+      border-color: #3498db;
+      transform: scale(1.05);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 25px;
+      background: linear-gradient(45deg, #3498db, #2980b9);
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease-in-out;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #2980b9, #3498db);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .back-btn {
+      background: linear-gradient(45deg, #2ecc71, #27ae60);
+    }
+
+    .back-btn:hover {
+      background: linear-gradient(45deg, #27ae60, #2ecc71);
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      display: block;
+    }
+
+    .footer {
+      margin-top: 20px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .popup button {
+      background: #e74c3c;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .popup button:hover {
+      background: #c0392b;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      background-color: #fff;
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.8);
+    }
+    .popup p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+.message-box {
+  position: fixed;
+  top: 20px;
+  right: -300px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ecf0f1;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.5s forwards, fadeOut 3s ease-in-out 2s forwards;
+}
+.message-box.success {
+  background: rgba(46, 204, 113, 0.8); 
+  color: white;
+}
+
+.message-box.error {
+  background: rgba(231, 76, 60, 0.8); 
+  color: white;
+}
+@keyframes slideIn {
+  from {
+    right: -300px;
+    opacity: 0;
+  }
+  to {
+    right: 20px;
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+}
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+button {
+  width: 100%;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Log In</h1>
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% if messages %}
+            {% for message in messages %}
+                <div class="message-box" id="popupMessage">{{ message }}</div>
+            {% endfor %}
+            <script>
+                document.getElementById("popupMessage").style.display = "block";
+            </script>
+      {% endif %}
+      <label for="un"><b>Username</b></label>
+      <input type="text" name="un" id="un" required>
+
+      <label for="pw"><b>Password</b></label>
+      <input type="password" name="pw" id="pw" required>
+      <div class="button-group">
+
+      <button type="button" class="back-btn"><a href="{% url 'index' %}">Back</a></button>
+      <button type="submit">Login</button>
+
+      </div>
+      
+      
+    </form>
+    <div class="footer">
+      <p><a href="{% url 'forgot_password' %}">Forgot Password?</a></p>
+    </div>
+  </div>
+
+  <div id="popup" class="popup">
+    <p id="popup-message"></p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+
+  <script>
+    function showPopup(message) {
+      document.getElementById("popup-message").innerText = message;
+      document.getElementById("popup").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var msg = "{{ msg|escapejs }}";
+      if (msg) {
+        showPopup(msg);
+      }
+    });
+  </script>
+
+  {% endblock content %}
+</body>
+
+</html>

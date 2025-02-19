@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibrant Form</title>
+  {% block content %}
+  {% load static %}
+  <link rel="icon" type="image/png" href="{% static 'images/titleform.jpeg' %}">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: url("{% static 'images/form.webp' %}") no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #f0f0f0;
+    }
+    .container {
+      background: rgba(2, 47, 73, 0.85);
+      border-radius: 15px;
+      padding: 40px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 8px 30px rgba(201, 8, 219, 0.8);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      flex: 1;
+      font-size: 1.1rem;
+      color: #ffffff;
+      text-align: right;
+      margin-right: 15px;
+    }
+    .form-group input, .form-group textarea {
+      flex: 2;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .btn {
+      width: 50%;
+      padding: 15px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #43cea2, #185a9d);
+      color: white;
+      border: none;
+      cursor: pointer;
+      
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #185a9d, #43cea2);
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+      z-index: 1000;
+    }
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+    .modal-content {
+      background: #022f49;
+      padding: 30px 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(201, 8, 219, 0.8);
+      color: #ffffff;
+      max-width: 400px;
+      width: 90%;
+      animation: popIn 0.5s ease-out;
+    }
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .modal h2 {
+      margin-bottom: 15px;
+      font-size: 2rem;
+    }
+    .modal p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+    .modal-close {
+      display: inline-block;
+      background: linear-gradient(45deg, #fc5c7d, #6a82fb);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .modal-close:hover {
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fill Out This Form</h1>
+    <form id="myForm" action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_fname">First Name:</label>
+        <input type="text" name="fname" id="id_fname" value="{{ user.first_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_lname">Last Name:</label>
+        <input type="text" name="lname" id="id_lname" value="{{ user.last_name }}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_email">Email:</label>
+        <input type="email" name="email" id="id_email" value="{{ user.email }}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_contact">Mobile Number:</label>
+        <input type="tel" name="contact" id="id_contact" maxlength="10" pattern="[0-9]{10}" required>
+      </div>
+      <div class="form-group">
+        <label for="id_edu">Education:</label>
+        <input type="text" name="edu" id="id_edu" required>
+      </div>
+      <div class="form-group">
+        <label for="id_file">Upload File:</label>
+        <input type="file" name="file" id="id_file" required>
+      </div>
+      <div class="form-group">
+        <label for="id_address">Skills:</label>
+        <textarea name="address" id="id_address" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+</div>
+
+<div id="popupModal" class="modal">
+  <div class="modal-content">
+    <h2>Thank You For Submitting 🤗🤗</h2>
+    <p>Your form has been successfully submitted!</p>
+    <a href="#" class="modal-close">Close</a>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('myForm');
+  const modal = document.getElementById('popupModal');
+  const modalClose = document.querySelector('.modal-close');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    modal.classList.add('active');
+  });
+
+  modalClose.addEventListener('click', function(event) {
+    event.preventDefault();
+    modal.classList.remove('active');
+    form.submit();
+  });
+</script>
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  {% block content %}
+
+  {% load static %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <link rel="icon" type="image/png" href="{% static 'images/title signup.png' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: url("{% static 'images/signup.jpg' %}") no-repeat center center/cover;
+    }
+    .glass {
+      position: relative;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+    h1 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 24px;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .form-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      color: #fff;
+      font-weight: 600;
+      width: 30%;
+    }
+    .form-group input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(45deg, #6A82FB, #FC5C7D);
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-evenly;
+      
+
+  
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="glass">
+    <h1>Create Account</h1>
+    <form id="signupForm" action="" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" value="{{ username }}" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" value="{{ email }}" required>
+        <button type="submit" name="action" value="send_verification_code" class="btn">Send Code</button>
+      </div>
+      <div class="form-group">
+        <label for="email-verify">Verification Code</label>
+        <input type="text" name="verification_code" id="verification_code" value="{{ verification_code }}">
+        <button type="button" onclick="validateCode()" class="btn">Verify</button>
+      </div>
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" name="password1" value="{{ password1 }}" id="password">
+      </div>
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" name="password2" value="{{ password2 }}" id="password">
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn"><a href="{% url 'index' %}" style="color: white; text-decoration: none;">Back</a></button>
+        <button type="submit" name="action" value="sign_up" class="btn">Sign Up</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    {% if messages %}
+      {% for message in messages %}
+        Swal.fire({
+          icon: 'success',
+          title: '{{ message }}',
+          showConfirmButton: true
+        });
+      {% endfor %}
+    {% endif %}
+  
+    function validateCode() {
+      var enteredCode = document.getElementById('verification_code').value;
+      if (!enteredCode) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Empty Code',
+              text: 'Please enter the verification code.',
+          });
+          return;
+      }
+      fetch("{% url 'validate_code' %}", {
+          method: "POST",
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({ verification_code: enteredCode })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Code Validated',
+                  text: 'Your verification code is correct.',
+              });
+          } else {
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Invalid Code',
+                  text: data.message, 
+              });
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'There was an issue validating your code. Please try again later.',
+          });
+      });
+    }
+  </script>
+  {% endblock content %}
+</body>
+</html>
