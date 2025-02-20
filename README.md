@@ -10,8 +10,8 @@ Job listing and application system
 Secure REST API with authentication
 ---------------------
 🛠️ Tech Stack
-Backend: Django, Django REST Framework
-Database: PostgreSQL
+Backend: Django | REST APIs 
+Database: Sqlite3
 Frontend: HTML, CSS, JavaScript
 
 ---------------------
